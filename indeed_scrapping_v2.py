@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 17 09:52:56 2019
-
-@author: Tapobrata
-"""
 
 # -*- coding: utf-8 -*-
 """
@@ -12,48 +6,24 @@ Created on Wed Oct 16 13:36:44 2019
 @author: Tapobrata
 """
 
-"""
-Created on Wed Oct  2 14:52:07 2019
 
-@author: Tapobrata
-"""
 
-#Livemint SCRAPPING
-
-#Importing all the necessary libraries and mentioning the path for reading the 9 CSV files
+#Importing all the necessary libraries
 import matplotlib
 import numpy as np
 import random 
+import os
 import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime
 import re
 import time
 import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.stats import norm
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-import xgboost
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression
-import math
 import time
-#Oxford 
 from bs4 import BeautifulSoup
 import urllib.request
-import csv
-#import httplib
-import requests
-import winsound
-import json
-from slimit import ast
-from slimit.parser import Parser
-from slimit.visitors import nodevisitor
 from pandas import ExcelWriter
 from itertools import combinations
-
-# specify the url
 
 main_path = 'D:/web scrapping/personal_projects'
 import os
@@ -73,7 +43,6 @@ for city_index in range(0,len(city_list)):
         
         original_html = 'https://www.indeed.com/jobs?q=data+scientist+$65,000&l='+city_name+'&start='+str(number)
         
-        #original_html = 'https://www.indeed.com/jobs?q=data+scientist+$65,000&l=California&start='+str(number)
         urlpage =  str(original_html)
         #main_word = top_10pages[i]
         # query the website and return the html to the variable 'page'
@@ -109,13 +78,6 @@ for city_index in range(0,len(city_list)):
         
         ##corect link - https://www.indeed.com/viewjob?cmp=RMDS-Lab&t=Data+Scientist&jk=614f9fbd6a80e036
         all_podcast_links = [i.split('-')[-1] for i in all_podcast_links]
-        #all_podcast_links = [i.split('?fccid')[0] for i in all_podcast_links]
-        
-        #check_1 = [i for i in all_podcast_links if '/rc/clk' not in i]
-        #begin_text = '/rc/clk?jk='
-        #check_1 = [begin_text+s for s in check_1]
-        #text_replace = "?fccid="
-        #check_1 = [w.replace(text_replace,"&amp;fccid=") for w in check_1]
         
         modified_links = []
         for i in range(0,len(all_podcast_links)):
@@ -131,9 +93,7 @@ for city_index in range(0,len(city_list)):
             modified_links.append(main_link_text)
         
         text_delete = '/rc/clk'
-        #text_replace = "/company/"
         all_podcast_links = [w.replace(text_delete,"") for w in modified_links]
-        #all_podcast_links = [w.replace(text_replace,"cmp=") for w in all_podcast_links]
         text_replace = "/jobs/"
         all_podcast_links = [w.replace(text_replace,"&t=") for w in all_podcast_links]
         text_to_add = 'https://www.indeed.com/viewjob?'
@@ -180,16 +140,11 @@ for city_index in range(0,len(city_list)):
         
         
         all_company_df = pd.DataFrame()
-        ###Opening links present in the page###Opening links present in the page###Opening links present in the page###Opening links present in the page###Opening links present in the page
-        ###Opening links present in the page###Opening links present in the page###Opening links present in the page###Opening links present in the page###Opening links present in the page
         for i in range(0, len(full_company_df)):
             #i = 0
             new_link = full_company_df['JD_Link'][i]
             urlpage =  str(new_link)
-            #main_word = top_10pages[i]
-            # query the website and return the html to the variable 'page'
             page = urllib.request.urlopen(urlpage)
-            # parse the html using beautiful soup and store in variable 'soup'
             soup = BeautifulSoup(page, 'html.parser')
             
             script = soup.find('script')
@@ -204,10 +159,7 @@ for city_index in range(0,len(city_list)):
             master_df = pd.DataFrame({'JD_Link' : urlpage, 'job_description' : job_description}, index = [0])
             all_company_df = all_company_df.append(master_df)
             print('JD extracted for ', (i+1), "out of -", len(full_company_df))
-        
-        ####Rough below####Rough below####Rough below####Rough below####Rough below####Rough below
-        ####Rough below####Rough below####Rough below####Rough below####Rough below####Rough below
-        ####Rough below####Rough below####Rough below####Rough below####Rough below####Rough below
+       
         
         full_company_df = pd.merge(full_company_df, all_company_df, on = ['JD_Link'], how = 'left')
         all_company_final_summary = all_company_final_summary.append(full_company_df)
@@ -221,11 +173,9 @@ time1 = time.strftime("%m%d-%H%M")
 folder_name = "all_cities_data_science_jobs" + time1
 writer = ExcelWriter(folder_name+ '_update.xlsx')
 all_company_final_summary.to_excel(writer, 'all_summary_roles', index = False)
-#survey_cartocar.to_excel(writer , 'merged_survey_cartocar')
 writer.save()
 
 
-#Finding meaning of words
 
 
 
